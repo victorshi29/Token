@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Text.Json;
 
@@ -7,14 +7,14 @@ using System.Text.Json;
         static void Main(string[] args)
         {
             string urlPath = "C:\\Users\\victo\\Desktop\\testfiles\\token2url.txt";
-            string headerPath = "C:\\Users\\victo\\Desktop\\testfiles\\token2header.txt";
+            string paramPath = "C:\\Users\\victo\\Desktop\\testfiles\\token2param.txt";
             string tokenURL = Methods.readFile(urlPath);
-            string requestHeaders = Methods.readFile(headerPath);
+            string requestParameters = Methods.readFile(paramPath);
                  
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 
-            HttpContent httpContent = new StringContent(requestHeaders, System.Text.Encoding.UTF8, "application/x-www-form-urlencoded");
+            HttpContent httpContent = new StringContent(requestParameters, System.Text.Encoding.UTF8, "application/x-www-form-urlencoded");
 
             string message = (Methods.postRequest(client, tokenURL, httpContent)).Result;
             Console.WriteLine(message);
