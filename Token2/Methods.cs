@@ -31,6 +31,8 @@ public class Methods
     public static void InsertVehiclesData(Vehicles VehiclesObject)
     {
         string connectionString = "Server=localhost; Database=Vehicles; User Id=sa; Password=password";
+        //string connectionString = "Server=localhost; Database=test; Integrated Security=True;";
+        //^ this is for when u want to do windows login into server
 
         string udi = "";
         string value = "";
@@ -40,7 +42,7 @@ public class Methods
         string serialNumber = "";        
         string vehicleNumber = "";
 
-        string queryvalue = "";
+        string insertParameters = "";
 
         for (int i = 0; i < VehiclesObject.Vehicle.Count; i++)
         {
@@ -54,16 +56,16 @@ public class Methods
                 else if(udi.Equals("30")) serialNumber = value;
                 else if(udi.Equals("40")) vehicleNumber = value;
             }
-            queryvalue += string.Format("('{0}', '{1}', '{2}', '{3}'),", vehicleID, vin, serialNumber, vehicleNumber);
+            insertParameters += string.Format("('{0}', '{1}', '{2}', '{3}'),", vehicleID, vin, serialNumber, vehicleNumber);
         }
 
-        queryvalue = queryvalue.Remove(queryvalue.Length-1); //removes the extra comma at the end  
-        string insertquery = string.Format("INSERT INTO dbo.Vehicle (VehicleID, VIN, SerialNumber, VehicleNumber) VALUES {0};", queryvalue);  
+        insertParameters = insertParameters.Remove(insertParameters.Length-1); //removes the extra comma at the end  
+        string insertString = string.Format("INSERT INTO dbo.Vehicle (VehicleID, VIN, SerialNumber, VehicleNumber) VALUES {0};", insertParameters);  
         
         System.Data.SqlClient.SqlConnection sqlConnection = new System.Data.SqlClient.SqlConnection(connectionString);
         sqlConnection.Open();
 
-        System.Data.SqlClient.SqlCommand insertCommand = new System.Data.SqlClient.SqlCommand(insertquery);
+        System.Data.SqlClient.SqlCommand insertCommand = new System.Data.SqlClient.SqlCommand(insertString);
         insertCommand.Connection = sqlConnection;
         Console.WriteLine("Rows changed: {0}", insertCommand.ExecuteNonQuery());
         sqlConnection.Close();
@@ -80,10 +82,8 @@ public class Methods
         command.Connection = sqlConnection;
         System.Data.SqlClient.SqlDataReader sqlreader = command.ExecuteReader();
         while(sqlreader.Read())
-        {        
-            Console.WriteLine(sqlreader.GetSqlString(0) + "\t" + sqlreader.GetSqlString(1) + 
-            "\t" + sqlreader.GetSqlString(2) + "\t" + sqlreader.GetSqlString(3));
-            
+        {
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}", sqlreader.GetSqlString(0), sqlreader.GetSqlString(1), sqlreader.GetSqlString(2), sqlreader.GetSqlString(3));
         }
         sqlreader.Close();
     }
