@@ -7,3 +7,5 @@ The program receives the message body, and deserializes it into an object that c
 Similar to above, the program uses a HTTP POST request and deserialization to obtain a token object. 
 The token is used to send another HTTP POST to receive a large message body that contains a list of VINs and other related data in XML form.
 This data is then deserialized. Afterwards, some of the data is extracted from the object and inserted into a local SQL Server database.
+
+Clarification: Token and Token2 aren't related
